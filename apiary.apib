@@ -1,0 +1,125 @@
+FORMAT: 1A
+
+# Adapter API
+
+The most important part of VICINITY Agent is the VICINITY Adapter subcomponent. 
+Adapter serves as the proxy between common VICINITY services and underlying infrastructure. 
+For each specific infrastructure to be integrated, there must exist specific VICINITY Adapter. 
+The role of Adapter is to translate VICINITY services into infrastructure specific services. 
+VICINITY Adapter provides the API, which must be implemented, when integrating new 
+infrastructure.
+
+## IoT objects [/things]
+
+### List All IoT objects [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "name": "stars1",
+                "id": "c5121251-a20f-46f0-afb7-f32e7fa54693",
+                "type": [
+                    "Thing",    
+                    "s4all:Photometer"
+                ],
+                "links": 
+                    {
+                        "href": "http://localhost:5000/things/stars1",
+                        "type": "Endpoint",
+                        "mediaType": "application/json"
+                    },
+                "interactions": [
+                    {
+                        "type": "Property",
+                        "links": {
+                            "href": "properties/tamb",
+                            "type": "Endpoint",
+                            "mediaType": "application/json"
+                        },
+                        "name": "tamb"
+                    },
+                    {
+                        "type": "Property",
+                        "links": {
+                            "href": "properties/tsky",
+                            "type": "Endpoint",
+                            "mediaType": "application/json"
+                        },
+                        "name": "tsky"
+                    },
+                    {
+                        "type": "Property",
+                        "links": {
+                            "href": "properties/mag",
+                            "type": "Endpoint",
+                            "mediaType": "application/json"
+                        },
+                        "name": "mag"
+                    },
+                    {
+                        "type": "Property",
+                        "links": {
+                            "href": "properties/freq",
+                            "type": "Endpoint",
+                            "mediaType": "application/json"
+                        },
+                        "name": "freq"
+                    }
+            },
+        ]
+
+## Thing's property [/things/{thing_id}/properties/{property}]
+
++ Parameters
+    + thing_id (guid) - ID of the IoT thing in the underlying infrastructure in the form of an GUID
+    + property (string) - name of the property supported by the thing identified by thing_id in the form of a string
+
+### Getting a value of a property [GET]
+
+Get a value of corresponding property of the IoT device maitained by the underlying IoT
+infrastructure.
+
++ Response 201 (application/json)
+
+        {
+            "id": "c5121251-a20f-46f0-afb7-f32e7fa54693",
+            "url": "/things/c5121251-a20f-46f0-afb7-f32e7fa546931/properties/freq",
+            "value": 123.4    
+        }
+
+
+### Setting a value of a property [PUT]
+
+Set a value of corresponding property of the IoT device maitained by the underlying IoT
+infrastructure.
+
++ Request (application/json)
+
+        {
+            "id": "c5121251-a20f-46f0-afb7-f32e7fa54693",
+            "url": "/things/c5121251-a20f-46f0-afb7-f32e7fa546931/properties/freq",
+            "value": 123.4    
+        }
+
++ Response 204 (application/json)
+
+## Thing's actions [/things/{thing_id}/actions/{action}]
+
++ Parameters
+    + thing_id (guid) - ID of the IoT thing in the underlying infrastructure in the form of an GUID
+    + action (string) - name of the action supported by the thing identified by thing_id in the form of a string
+
+### Performing specified action  [PUT]
+
+Perform specified action of the IoT device maitained by the underlying IoT
+infrastructure.
+
++ Request (application/json)
+
+        {
+            "id": "c5121251-a20f-46f0-afb7-f32e7fa54693",
+            "url": "/things/c5121251-a20f-46f0-afb7-f32e7fa546931/actions/switchoff"
+        }
+
++ Response 204 (application/json)
